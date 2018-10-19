@@ -1,16 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-struct IntListItem {
-  struct IntListItem* prox;
-  int value;
-};
-
-struct IntList {
-  struct IntListItem* inicio;
-  int size;
-};
+#include "./cln.h"
 
 struct IntList* newIntList(){
   struct IntList* l = (struct IntList*)malloc(sizeof(struct IntList));
@@ -57,18 +48,6 @@ int intListCheckInclude(struct IntList* l, int value){
   }
   return 0;
 }
-
-struct HashListItem {
-  struct IntList* connections;
-  struct HashListItem* prox;
-  char* value;
-  int cod;
-};
-
-struct HashList {
-  struct HashListItem* inicio;
-  int size;
-};
 
 struct HashList* newHashList(){
   struct HashList* l = (struct HashList*)malloc(sizeof(struct HashList));
@@ -146,17 +125,6 @@ void hashListConnect(struct HashList* h, char* value1, char* value2){
   }
 }
 
-struct StringListItem {
-  struct StringListItem* prox;
-  char* value;
-};
-
-struct StringList {
-  struct StringListItem* inicio;
-  int size;
-};
-
-
 struct StringList* newStringList(){
   struct StringList* l = (struct StringList*)malloc(sizeof(struct StringList));
   l->size = 0;
@@ -216,6 +184,7 @@ struct StringList* hashListFind(struct HashList* h, char* who, char* what){
   struct IntList* who_cons = hashListGetItemByValue(h, who)->connections;
   struct IntList* what_cons = hashListGetItemByValue(h, what)->connections;
 
+
   struct IntListItem* p;
   int i;
   for(i=0, p=what_cons->inicio;i<what_cons->size; p=p->prox, i++){
@@ -232,41 +201,4 @@ struct StringList* hashListFind(struct HashList* h, char* who, char* what){
   }
 
   return query;
-}
-
-void main(){
-  struct HashList* h = newHashList();
-
-  hashListAppendItem(h, "Jefferson");
-  hashListAppendItem(h, "Bruno");
-  hashListAppendItem(h, "Jessica");
-  hashListAppendItem(h, "FRIEND");
-  hashListAppendItem(h, "AGE");
-  hashListAppendItem(h, "19");
-
-
-  hashListLink(h, "Jefferson", "AGE", "19");
-
-  hashListLink(h, "Jefferson", "FRIEND", "Bruno");
-
-  hashListLink(h, "Jefferson", "FRIEND", "Jessica");
-
-
-  struct StringList* query;
-
-  printf("Get age: \n");
-  query = hashListFind(h, "Jefferson", "AGE");
-
-
-  for(int i=0;i<query->size; i++){
-    printf("index %d : %s\n", i, stringListGetItem(query, i));
-  }
-
-  printf("Get friends: \n");
-  query = hashListFind(h, "Jefferson", "FRIEND");
-
-
-  for(int i=0;i<query->size; i++){
-    printf("index %d : %s\n", i, stringListGetItem(query, i));
-  }
 }
